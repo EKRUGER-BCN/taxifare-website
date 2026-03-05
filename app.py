@@ -49,6 +49,6 @@ if st.button("Get Fare Estimate 🚀"):
 
     if response.status_code == 200:
         prediction = response.json().get("fare_amount", "N/A")
-        st.success(f"💰 Estimated fare: **${prediction:.2f}**")
+        st.success(f"💰 Estimated fare: **${float(prediction):.2f}**")
     else:
         st.error(f"API error: {response.status_code}")

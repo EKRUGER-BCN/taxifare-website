@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import pandas as pd
 from datetime import datetime
 
 st.title("🚕 TaxiFare Predictor")
@@ -22,7 +23,6 @@ with col2:
 passenger_count = st.slider("Passenger count", min_value=1, max_value=8, value=1)
 
 # --- Map preview ---
-import pandas as pd
 map_data = pd.DataFrame({
     "lat": [pickup_lat, dropoff_lat],
     "lon": [pickup_lon, dropoff_lon]
@@ -48,7 +48,11 @@ if st.button("Get Fare Estimate 🚀"):
         response = requests.get(url, params=params)
 
     if response.status_code == 200:
-        prediction = response.json().get("fare_amount", "N/A")
-        st.success(f"💰 Estimated fare: **${float(prediction):.2f}**")
+        data = response.json()
+        prediction = data.get("fare", data.get("fare_amount", None))
+        if prediction is not None:
+            st.success(f"💰 Estimated fare: **${float(prediction):.2f}**")
+        else:
+            st.error(f"Unexpected API response: {data}")
     else:
-        st.error(f"API error: {response.status_code}")
+        st.error(f"API error {response.status_code}: {response.text}")

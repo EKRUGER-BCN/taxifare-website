@@ -15,19 +15,24 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
 
 :root {
-    --yellow: #F5A623;
-    --yellow-dim: #d4891a;
-    --yellow-glow: rgba(245,166,35,0.18);
-    --bg: #2b2d35;
-    --surface: #23252d;
-    --surface2: #1e2028;
-    --surface3: #2f3140;
-    --border: #3d3f4e;
-    --border-bright: #52546a;
-    --text: #e8e9f0;
-    --muted: #8b8da8;
-    --green: #4ade80;
-    --red: #f87171;
+    --orange: #F5A623;
+    --orange-dim: #d4891a;
+    --orange-glow: rgba(245,166,35,0.18);
+    --bg: #e8eaf0;
+    --surface: #d4d7e0;
+    --surface2: #c8ccd8;
+    --surface3: #dde0e8;
+    --border: #b8bccc;
+    --border-bright: #a0a4b8;
+    --text: #1e2030;
+    --muted: #5a5f78;
+    --green: #16a34a;
+    --red: #dc2626;
+    --sidebar-bg: #2b2d38;
+    --sidebar-surface: #23252f;
+    --sidebar-border: #3a3c4a;
+    --sidebar-text: #e8eaf0;
+    --sidebar-muted: #8b8da8;
 }
 
 * { box-sizing: border-box; }
@@ -38,65 +43,68 @@ st.markdown("""
 }
 [data-testid="stHeader"] { display: none !important; }
 #MainMenu, footer, [data-testid="stToolbar"] { visibility: hidden; }
+
+/* kill ALL default padding */
 .block-container {
-    padding: 1rem 1.5rem 1rem 1.5rem !important;
+    padding: 0.5rem 1rem 1rem 1rem !important;
     max-width: 100% !important;
 }
+.main > div { padding-top: 0 !important; }
 
 /* ── SIDEBAR ── */
 [data-testid="stSidebar"] {
-    background: var(--surface) !important;
-    border-right: 2px solid var(--yellow) !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
+    background: var(--sidebar-bg) !important;
+    border-right: 2px solid var(--orange) !important;
+    min-width: 290px !important;
+    max-width: 290px !important;
 }
 [data-testid="stSidebar"] > div {
-    padding: 1rem 1rem 2rem 1rem !important;
+    padding: 0.75rem 1rem 2rem 1rem !important;
 }
 [data-testid="stSidebarNav"] { display: none; }
 
-/* ── SIDEBAR LOGO ── */
+/* ── LOGO ── */
 .sb-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    color: var(--yellow);
+    font-size: 2rem;
+    color: var(--orange);
     letter-spacing: 5px;
     line-height: 1;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
-.sb-logo span { color: var(--text); }
+.sb-logo span { color: var(--sidebar-text); }
 .sb-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 0.48rem;
-    color: var(--muted);
+    font-size: 0.45rem;
+    color: var(--sidebar-muted);
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--sidebar-border);
 }
 
-/* ── SECTION LABELS ── */
+/* ── SECTION LABELS (no numbers) ── */
 .sl {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
+    font-size: 0.48rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--yellow);
-    margin: 1rem 0 0.5rem 0;
+    color: var(--orange);
+    margin: 0.85rem 0 0.4rem 0;
 }
-.sl::before { content:''; display:block; width:10px; height:2px; background:var(--yellow); flex-shrink:0; }
-.sl::after  { content:''; display:block; flex:1; height:1px; background:var(--border); }
+.sl::before { content:''; display:block; width:10px; height:2px; background:var(--orange); flex-shrink:0; }
+.sl::after  { content:''; display:block; flex:1; height:1px; background:var(--sidebar-border); }
 
-/* ── INPUTS ── */
+/* ── SIDEBAR INPUTS ── */
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
-    color: var(--muted) !important;
+    color: var(--sidebar-muted) !important;
     font-family: 'Space Mono', monospace !important;
-    font-size: 0.52rem !important;
+    font-size: 0.5rem !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
 }
@@ -104,70 +112,69 @@ st.markdown("""
 [data-testid="stSidebar"] input[type="text"],
 [data-testid="stSidebar"] [data-testid="stDateInput"] input,
 [data-testid="stSidebar"] [data-testid="stTimeInput"] input {
-    background: var(--surface2) !important;
-    border: 1px solid var(--border-bright) !important;
+    background: var(--sidebar-surface) !important;
+    border: 1px solid var(--sidebar-border) !important;
     border-radius: 4px !important;
-    color: var(--text) !important;
+    color: var(--sidebar-text) !important;
     font-family: 'Space Mono', monospace !important;
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
 }
 [data-testid="stSidebar"] input:focus {
-    border-color: var(--yellow) !important;
-    box-shadow: 0 0 0 2px var(--yellow-glow) !important;
+    border-color: var(--orange) !important;
+    box-shadow: 0 0 0 2px var(--orange-glow) !important;
     outline: none !important;
 }
 
 /* ── SLIDER ── */
 [data-testid="stSidebar"] [data-testid="stSlider"] > div > div > div {
-    background: var(--border-bright) !important;
+    background: var(--sidebar-border) !important;
 }
 [data-testid="stSidebar"] [data-testid="stSlider"] > div > div > div > div {
-    background: var(--yellow) !important;
-    box-shadow: 0 0 10px var(--yellow-glow) !important;
+    background: var(--orange) !important;
+    box-shadow: 0 0 8px var(--orange-glow) !important;
 }
 
 /* ── BUTTON ── */
 [data-testid="stSidebar"] .stButton > button {
-    background: var(--yellow) !important;
+    background: var(--orange) !important;
     color: #1a1a1a !important;
     font-family: 'Bebas Neue', sans-serif !important;
-    font-size: 1.3rem !important;
+    font-size: 1.25rem !important;
     letter-spacing: 4px !important;
     border: none !important;
     border-radius: 4px !important;
     padding: 0.5rem 1rem !important;
     width: 100% !important;
     transition: all 0.2s ease !important;
-    margin-top: 0.25rem !important;
 }
 [data-testid="stSidebar"] .stButton > button:hover {
-    background: var(--yellow-dim) !important;
+    background: var(--orange-dim) !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 24px rgba(245,166,35,0.35) !important;
+    box-shadow: 0 6px 20px rgba(245,166,35,0.35) !important;
 }
 
 /* ── COORD BOX ── */
 .coord-box {
     font-family: 'Space Mono', monospace;
-    font-size: 0.56rem;
-    color: var(--muted);
+    font-size: 0.54rem;
+    color: var(--sidebar-muted);
     padding: 0.4rem 0.6rem;
-    background: var(--surface2);
+    background: var(--sidebar-surface);
     border-radius: 3px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--sidebar-border);
     line-height: 1.8;
     margin-top: 0.4rem;
 }
-.coord-box span { color: var(--yellow); }
+.coord-box span { color: var(--orange); }
 
 /* ── TIME CTX ── */
 .time-ctx {
     font-family: 'Space Mono', monospace;
-    font-size: 0.52rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
+    font-size: 0.5rem;
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--sidebar-border);
     border-radius: 4px;
-    padding: 5px 8px;
+    padding: 4px 8px;
     letter-spacing: 1px;
 }
 
@@ -175,68 +182,94 @@ st.markdown("""
 .pax-dots { display:flex; gap:5px; flex-wrap:wrap; margin-top:0.3rem; }
 .pax-dot {
     width:22px; height:22px; border-radius:50%;
-    border:2px solid var(--border-bright);
-    display:flex; align-items:center; justify-content:center; font-size:0.68rem;
+    border:2px solid var(--sidebar-border);
+    display:flex; align-items:center; justify-content:center; font-size:0.66rem;
 }
-.pax-dot.on { border-color:var(--yellow); background:var(--yellow-glow); }
+.pax-dot.on { border-color:var(--orange); background:var(--orange-glow); }
 
 /* ── STATS ── */
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; margin-top:0.5rem; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.35rem; margin-top:0.45rem; }
 .stat-box {
-    background: var(--surface3);
-    border: 1px solid var(--border);
-    border-radius: 4px; padding:0.45rem; text-align:center;
+    background: var(--sidebar-surface);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 4px; padding:0.4rem; text-align:center;
 }
-.stat-val { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--yellow); line-height:1; }
-.stat-lbl { font-family:'Space Mono',monospace; font-size:0.4rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
+.stat-val { font-family:'Bebas Neue',sans-serif; font-size:0.95rem; color:var(--orange); line-height:1; }
+.stat-lbl { font-family:'Space Mono',monospace; font-size:0.38rem; color:var(--sidebar-muted); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
 
 /* ── FARE BOX ── */
 .fare-box {
-    background: var(--surface2);
-    border: 1px solid var(--yellow);
+    background: var(--sidebar-surface);
+    border: 1px solid var(--orange);
     border-radius: 6px;
-    padding:0.9rem; text-align:center; position:relative; overflow:hidden; margin-top:0.6rem;
+    padding:0.8rem; text-align:center; position:relative; overflow:hidden; margin-top:0.5rem;
 }
 .fare-box::before {
     content:''; position:absolute; inset:0;
     background:radial-gradient(ellipse at center, rgba(245,166,35,0.07) 0%, transparent 70%);
 }
-.fare-lbl { font-family:'Space Mono',monospace; font-size:0.48rem; letter-spacing:4px; color:var(--muted); text-transform:uppercase; }
-.fare-amt { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; color:var(--yellow); line-height:1; text-shadow:0 0 30px rgba(245,166,35,0.4); }
-.fare-cur { font-family:'Space Mono',monospace; font-size:0.5rem; color:var(--muted); letter-spacing:3px; }
-.verdict { display:inline-block; margin-top:0.5rem; padding:3px 12px; border-radius:2px; font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:2px; font-weight:700; }
-.v-cheap  { background:rgba(74,222,128,0.12); color:var(--green); border:1px solid var(--green); }
-.v-mid    { background:rgba(245,166,35,0.12); color:var(--yellow); border:1px solid var(--yellow); }
-.v-pricey { background:rgba(248,113,113,0.12); color:var(--red); border:1px solid var(--red); }
+.fare-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; letter-spacing:4px; color:var(--sidebar-muted); text-transform:uppercase; }
+.fare-amt { font-family:'Bebas Neue',sans-serif; font-size:2.6rem; color:var(--orange); line-height:1; text-shadow:0 0 24px rgba(245,166,35,0.4); }
+.fare-cur { font-family:'Space Mono',monospace; font-size:0.48rem; color:var(--sidebar-muted); letter-spacing:3px; }
+.verdict { display:inline-block; margin-top:0.45rem; padding:3px 12px; border-radius:2px; font-family:'Space Mono',monospace; font-size:0.52rem; letter-spacing:2px; font-weight:700; }
+.v-cheap  { background:rgba(22,163,74,0.15);  color:#4ade80; border:1px solid #4ade80; }
+.v-mid    { background:rgba(245,166,35,0.15); color:var(--orange); border:1px solid var(--orange); }
+.v-pricey { background:rgba(220,38,38,0.15);  color:#f87171; border:1px solid #f87171; }
 
 .tip-total {
-    background:var(--surface3); border:1px solid var(--border); border-radius:4px;
-    padding:0.45rem 0.75rem; margin-top:0.4rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--sidebar-border); border-radius:4px;
+    padding:0.4rem 0.65rem; margin-top:0.35rem;
     display:flex; justify-content:space-between; align-items:center;
 }
-.tip-lbl { font-family:'Space Mono',monospace; font-size:0.48rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
-.tip-val { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--yellow); }
+.tip-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; color:var(--sidebar-muted); letter-spacing:2px; text-transform:uppercase; }
+.tip-val { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--orange); }
 
 /* ── MAIN AREA ── */
 .main-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
+    font-family: 'Space Mono', sans-serif;
+    font-size: 0.6rem;
     letter-spacing: 4px;
     color: var(--muted);
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 [data-testid="stDeckGlJsonChart"] {
     border-radius: 8px !important;
     border: 1px solid var(--border) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important;
 }
 
 [data-testid="stSidebar"] h3 {
     font-family:'Bebas Neue',sans-serif !important;
-    font-size:0.85rem !important; color:var(--text) !important;
-    letter-spacing:2px !important; margin-bottom:0.15rem !important;
-    margin-top: 0 !important;
+    font-size:0.82rem !important;
+    color:var(--sidebar-text) !important;
+    letter-spacing:2px !important;
+    margin: 0 0 0.15rem 0 !important;
+}
+
+/* ── MOBILE FIX ── */
+/* On mobile, show sidebar content ABOVE the map */
+@media (max-width: 768px) {
+    [data-testid="stSidebar"] {
+        min-width: 100vw !important;
+        max-width: 100vw !important;
+        border-right: none !important;
+        border-bottom: 2px solid var(--orange) !important;
+        position: relative !important;
+        height: auto !important;
+    }
+    [data-testid="stSidebar"] > div {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .block-container {
+        padding: 0.5rem !important;
+    }
+    [data-testid="stDeckGlJsonChart"] {
+        height: 400px !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -261,8 +294,8 @@ with st.sidebar:
     <div class="sb-sub">🟠 Live ML Fare Estimator</div>
     """, unsafe_allow_html=True)
 
-    # 01 — WHEN
-    st.markdown('<div class="sl">01 &nbsp; When?</div>', unsafe_allow_html=True)
+    # WHEN
+    st.markdown('<div class="sl">When?</div>', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
         pickup_date = st.date_input("Date", value=datetime.today())
@@ -278,8 +311,8 @@ with st.sidebar:
         tctx, tclr = "✅ Standard fare period", "#4ade80"
     st.markdown(f'<div class="time-ctx" style="color:{tclr};">{tctx}</div>', unsafe_allow_html=True)
 
-    # 02 — WHERE
-    st.markdown('<div class="sl">02 &nbsp; Where to?</div>', unsafe_allow_html=True)
+    # WHERE
+    st.markdown('<div class="sl">Where to?</div>', unsafe_allow_html=True)
     ca, cb = st.columns(2)
     with ca:
         st.markdown("### 📍 Pickup")
@@ -301,8 +334,8 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
-    # 03 — PASSENGERS
-    st.markdown('<div class="sl">03 &nbsp; Passengers</div>', unsafe_allow_html=True)
+    # PASSENGERS
+    st.markdown('<div class="sl">Passengers</div>', unsafe_allow_html=True)
     passenger_count = st.slider("", min_value=1, max_value=8, value=1)
     dots = '<div class="pax-dots">'
     for i in range(1, 9):
@@ -321,9 +354,9 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
 
-    # ── BUTTON ──
+    # BUTTON
     if st.button("🚕  CALCULATE MY FARE"):
         params = {
             "pickup_datetime":   f"{pickup_date} {pickup_time}",
@@ -350,7 +383,7 @@ with st.sidebar:
         else:
             st.error(f"API Error {r.status_code}")
 
-    # ── FARE RESULT ──
+    # FARE RESULT
     if "fare" in st.session_state:
         fare = st.session_state["fare"]
         if fare < 15:   vcls, vtxt = "v-cheap",  "🟢 GREAT DEAL"
@@ -366,7 +399,7 @@ with st.sidebar:
     <div class="fare-cur">USD</div>
     <div><span class="verdict {vcls}">{vtxt}</span></div>
 </div>
-<div class="stats-row" style="margin-top:0.5rem;">
+<div class="stats-row" style="margin-top:0.45rem;">
     <div class="stat-box"><div class="stat-val">${t15:.2f}</div><div class="stat-lbl">15%</div></div>
     <div class="stat-box"><div class="stat-val">${t20:.2f}</div><div class="stat-lbl">20%</div></div>
     <div class="stat-box"><div class="stat-val">${t25:.2f}</div><div class="stat-lbl">25%</div></div>
@@ -378,9 +411,9 @@ with st.sidebar:
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────
-# MAIN AREA — MAP
+# MAIN — MAP
 # ─────────────────────────────────────────
-st.markdown('<div class="main-title">04 · Route Preview</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">Route Preview</div>', unsafe_allow_html=True)
 
 arc_layer = pdk.Layer(
     "ArcLayer",
@@ -388,7 +421,7 @@ arc_layer = pdk.Layer(
     get_source_position="src",
     get_target_position="dst",
     get_source_color=[245, 166, 35, 230],
-    get_target_color=[248, 113, 113, 230],
+    get_target_color=[220, 38, 38, 230],
     width_min_pixels=5, width_max_pixels=9,
     great_circle=True,
 )
@@ -396,14 +429,14 @@ scatter_layer = pdk.Layer(
     "ScatterplotLayer",
     data=[
         {"pos": [pickup_lon, pickup_lat],   "col": [245, 166, 35, 240], "lbl": "📍 Pickup"},
-        {"pos": [dropoff_lon, dropoff_lat], "col": [248, 113, 113, 240], "lbl": "🏁 Dropoff"},
+        {"pos": [dropoff_lon, dropoff_lat], "col": [220, 38, 38, 240],  "lbl": "🏁 Dropoff"},
     ],
     get_position="pos",
     get_fill_color="col",
     get_radius=80,
     radius_scale=6, radius_min_pixels=8, radius_max_pixels=20,
     pickable=True, stroked=True,
-    get_line_color=[255, 255, 255, 80],
+    get_line_color=[255, 255, 255, 100],
     line_width_min_pixels=2,
 )
 
@@ -417,9 +450,8 @@ deck = pdk.Deck(
         latitude=mid_lat, longitude=mid_lon,
         zoom=zoom, pitch=45, bearing=0,
     ),
-    # Carto Voyager — colorful, light street map
     map_style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
     tooltip={"text": "{lbl}"},
 )
 
-st.pydeck_chart(deck, use_container_width=True, height=820)
+st.pydeck_chart(deck, use_container_width=True, height=800)

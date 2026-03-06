@@ -15,48 +15,40 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
 
 :root {
-    --orange: #F5A623;
-    --orange-dim: #d4891a;
-    --orange-glow: rgba(245,166,35,0.18);
-    --bg: #e8eaf0;
-    --surface: #d4d7e0;
-    --surface2: #c8ccd8;
-    --surface3: #dde0e8;
-    --border: #b8bccc;
-    --border-bright: #a0a4b8;
-    --text: #1e2030;
-    --muted: #5a5f78;
-    --green: #16a34a;
-    --red: #dc2626;
-    --sidebar-bg: #2b2d38;
-    --sidebar-surface: #23252f;
-    --sidebar-border: #3a3c4a;
-    --sidebar-text: #e8eaf0;
-    --sidebar-muted: #8b8da8;
+    --yellow: #F7C948;
+    --yellow-dim: #c9a030;
+    --yellow-glow: rgba(247,201,72,0.15);
+    --black: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --surface3: #20202c;
+    --border: #2e2e3e;
+    --border-bright: #44445a;
+    --text: #f0f0f0;
+    --muted: #8888aa;
+    --green: #39ff14;
+    --red: #ff3939;
 }
 
 * { box-sizing: border-box; }
 
 [data-testid="stAppViewContainer"] {
-    background: var(--bg);
+    background: var(--black);
     font-family: 'DM Sans', sans-serif;
 }
 [data-testid="stHeader"] { display: none !important; }
 #MainMenu, footer, [data-testid="stToolbar"] { visibility: hidden; }
-
-/* kill ALL default padding */
 .block-container {
     padding: 0.5rem 1rem 1rem 1rem !important;
     max-width: 100% !important;
 }
-.main > div { padding-top: 0 !important; }
 
 /* ── SIDEBAR ── */
 [data-testid="stSidebar"] {
-    background: var(--sidebar-bg) !important;
-    border-right: 2px solid var(--orange) !important;
-    min-width: 290px !important;
-    max-width: 290px !important;
+    background: var(--surface) !important;
+    border-right: 2px solid var(--yellow) !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
 }
 [data-testid="stSidebar"] > div {
     padding: 0.75rem 1rem 2rem 1rem !important;
@@ -66,25 +58,25 @@ st.markdown("""
 /* ── LOGO ── */
 .sb-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: var(--orange);
+    font-size: 2.8rem;
+    color: var(--yellow);
     letter-spacing: 5px;
     line-height: 1;
     margin-bottom: 0.2rem;
 }
-.sb-logo span { color: var(--sidebar-text); }
+.sb-logo span { color: #fff; }
 .sb-sub {
     font-family: 'Space Mono', monospace;
     font-size: 0.45rem;
-    color: var(--sidebar-muted);
+    color: var(--muted);
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--sidebar-border);
+    border-bottom: 1px solid var(--border);
 }
 
-/* ── SECTION LABELS (no numbers) ── */
+/* ── SECTION LABELS ── */
 .sl {
     display: flex;
     align-items: center;
@@ -93,51 +85,49 @@ st.markdown("""
     font-size: 0.48rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--orange);
+    color: var(--yellow);
     margin: 0.85rem 0 0.4rem 0;
 }
-.sl::before { content:''; display:block; width:10px; height:2px; background:var(--orange); flex-shrink:0; }
-.sl::after  { content:''; display:block; flex:1; height:1px; background:var(--sidebar-border); }
+.sl::before { content:''; display:block; width:10px; height:2px; background:var(--yellow); flex-shrink:0; }
+.sl::after  { content:''; display:block; flex:1; height:1px; background:var(--border); }
 
-/* ── SIDEBAR INPUTS ── */
+/* ── INPUTS ── */
 [data-testid="stSidebar"] label,
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
-    color: var(--sidebar-muted) !important;
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+label, [data-testid="stWidgetLabel"] {
+    color: var(--muted) !important;
     font-family: 'Space Mono', monospace !important;
     font-size: 0.5rem !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
 }
-[data-testid="stSidebar"] input[type="number"],
-[data-testid="stSidebar"] input[type="text"],
-[data-testid="stSidebar"] [data-testid="stDateInput"] input,
-[data-testid="stSidebar"] [data-testid="stTimeInput"] input {
-    background: var(--sidebar-surface) !important;
-    border: 1px solid var(--sidebar-border) !important;
+input[type="number"], input[type="text"],
+[data-testid="stDateInput"] input,
+[data-testid="stTimeInput"] input {
+    background: var(--surface2) !important;
+    border: 1px solid var(--border-bright) !important;
     border-radius: 4px !important;
-    color: var(--sidebar-text) !important;
+    color: var(--yellow) !important;
     font-family: 'Space Mono', monospace !important;
     font-size: 0.72rem !important;
 }
-[data-testid="stSidebar"] input:focus {
-    border-color: var(--orange) !important;
-    box-shadow: 0 0 0 2px var(--orange-glow) !important;
+input:focus {
+    border-color: var(--yellow) !important;
+    box-shadow: 0 0 0 2px var(--yellow-glow) !important;
     outline: none !important;
 }
 
 /* ── SLIDER ── */
-[data-testid="stSidebar"] [data-testid="stSlider"] > div > div > div {
-    background: var(--sidebar-border) !important;
-}
-[data-testid="stSidebar"] [data-testid="stSlider"] > div > div > div > div {
-    background: var(--orange) !important;
-    box-shadow: 0 0 8px var(--orange-glow) !important;
+[data-testid="stSlider"] > div > div > div { background: var(--border-bright) !important; }
+[data-testid="stSlider"] > div > div > div > div {
+    background: var(--yellow) !important;
+    box-shadow: 0 0 8px var(--yellow-glow) !important;
 }
 
 /* ── BUTTON ── */
-[data-testid="stSidebar"] .stButton > button {
-    background: var(--orange) !important;
-    color: #1a1a1a !important;
+.stButton > button {
+    background: var(--yellow) !important;
+    color: #080808 !important;
     font-family: 'Bebas Neue', sans-serif !important;
     font-size: 1.25rem !important;
     letter-spacing: 4px !important;
@@ -147,32 +137,31 @@ st.markdown("""
     width: 100% !important;
     transition: all 0.2s ease !important;
 }
-[data-testid="stSidebar"] .stButton > button:hover {
-    background: var(--orange-dim) !important;
+.stButton > button:hover {
+    background: var(--yellow-dim) !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(245,166,35,0.35) !important;
+    box-shadow: 0 6px 20px rgba(247,201,72,0.3) !important;
 }
 
 /* ── COORD BOX ── */
 .coord-box {
     font-family: 'Space Mono', monospace;
     font-size: 0.54rem;
-    color: var(--sidebar-muted);
+    color: var(--muted);
     padding: 0.4rem 0.6rem;
-    background: var(--sidebar-surface);
+    background: var(--surface2);
     border-radius: 3px;
-    border: 1px solid var(--sidebar-border);
+    border: 1px solid var(--border);
     line-height: 1.8;
     margin-top: 0.4rem;
 }
-.coord-box span { color: var(--orange); }
+.coord-box span { color: var(--yellow); }
 
-/* ── TIME CTX ── */
 .time-ctx {
     font-family: 'Space Mono', monospace;
     font-size: 0.5rem;
-    background: rgba(0,0,0,0.15);
-    border: 1px solid var(--sidebar-border);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
     border-radius: 4px;
     padding: 4px 8px;
     letter-spacing: 1px;
@@ -182,94 +171,59 @@ st.markdown("""
 .pax-dots { display:flex; gap:5px; flex-wrap:wrap; margin-top:0.3rem; }
 .pax-dot {
     width:22px; height:22px; border-radius:50%;
-    border:2px solid var(--sidebar-border);
+    border:2px solid var(--border-bright);
     display:flex; align-items:center; justify-content:center; font-size:0.66rem;
 }
-.pax-dot.on { border-color:var(--orange); background:var(--orange-glow); }
+.pax-dot.on { border-color:var(--yellow); background:var(--yellow-glow); }
 
 /* ── STATS ── */
 .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.35rem; margin-top:0.45rem; }
-.stat-box {
-    background: var(--sidebar-surface);
-    border: 1px solid var(--sidebar-border);
-    border-radius: 4px; padding:0.4rem; text-align:center;
-}
-.stat-val { font-family:'Bebas Neue',sans-serif; font-size:0.95rem; color:var(--orange); line-height:1; }
-.stat-lbl { font-family:'Space Mono',monospace; font-size:0.38rem; color:var(--sidebar-muted); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
+.stat-box { background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:0.4rem; text-align:center; }
+.stat-val { font-family:'Bebas Neue',sans-serif; font-size:0.95rem; color:var(--yellow); line-height:1; }
+.stat-lbl { font-family:'Space Mono',monospace; font-size:0.38rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
 
 /* ── FARE BOX ── */
 .fare-box {
-    background: var(--sidebar-surface);
-    border: 1px solid var(--orange);
-    border-radius: 6px;
+    background: var(--surface2); border:1px solid var(--yellow); border-radius:6px;
     padding:0.8rem; text-align:center; position:relative; overflow:hidden; margin-top:0.5rem;
 }
 .fare-box::before {
     content:''; position:absolute; inset:0;
-    background:radial-gradient(ellipse at center, rgba(245,166,35,0.07) 0%, transparent 70%);
+    background:radial-gradient(ellipse at center, rgba(247,201,72,0.07) 0%, transparent 70%);
 }
-.fare-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; letter-spacing:4px; color:var(--sidebar-muted); text-transform:uppercase; }
-.fare-amt { font-family:'Bebas Neue',sans-serif; font-size:2.6rem; color:var(--orange); line-height:1; text-shadow:0 0 24px rgba(245,166,35,0.4); }
-.fare-cur { font-family:'Space Mono',monospace; font-size:0.48rem; color:var(--sidebar-muted); letter-spacing:3px; }
+.fare-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; letter-spacing:4px; color:var(--muted); text-transform:uppercase; }
+.fare-amt { font-family:'Bebas Neue',sans-serif; font-size:2.6rem; color:var(--yellow); line-height:1; text-shadow:0 0 24px rgba(247,201,72,0.4); }
+.fare-cur { font-family:'Space Mono',monospace; font-size:0.48rem; color:var(--muted); letter-spacing:3px; }
 .verdict { display:inline-block; margin-top:0.45rem; padding:3px 12px; border-radius:2px; font-family:'Space Mono',monospace; font-size:0.52rem; letter-spacing:2px; font-weight:700; }
-.v-cheap  { background:rgba(22,163,74,0.15);  color:#4ade80; border:1px solid #4ade80; }
-.v-mid    { background:rgba(245,166,35,0.15); color:var(--orange); border:1px solid var(--orange); }
-.v-pricey { background:rgba(220,38,38,0.15);  color:#f87171; border:1px solid #f87171; }
+.v-cheap  { background:rgba(57,255,20,0.15);  color:var(--green); border:1px solid var(--green); }
+.v-mid    { background:rgba(247,201,72,0.15); color:var(--yellow); border:1px solid var(--yellow); }
+.v-pricey { background:rgba(255,57,57,0.15);  color:var(--red); border:1px solid var(--red); }
 
 .tip-total {
-    background: rgba(0,0,0,0.2);
-    border: 1px solid var(--sidebar-border); border-radius:4px;
+    background:var(--surface3); border:1px solid var(--border); border-radius:4px;
     padding:0.4rem 0.65rem; margin-top:0.35rem;
     display:flex; justify-content:space-between; align-items:center;
 }
-.tip-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; color:var(--sidebar-muted); letter-spacing:2px; text-transform:uppercase; }
-.tip-val { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--orange); }
+.tip-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+.tip-val { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--yellow); }
 
-/* ── MAIN AREA ── */
+/* ── MAIN ── */
 .main-title {
-    font-family: 'Space Mono', sans-serif;
-    font-size: 0.6rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
     letter-spacing: 4px;
     color: var(--muted);
     text-transform: uppercase;
     margin-bottom: 0.4rem;
 }
-
 [data-testid="stDeckGlJsonChart"] {
     border-radius: 8px !important;
     border: 1px solid var(--border) !important;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important;
 }
-
-[data-testid="stSidebar"] h3 {
+h3 {
     font-family:'Bebas Neue',sans-serif !important;
-    font-size:0.82rem !important;
-    color:var(--sidebar-text) !important;
-    letter-spacing:2px !important;
-    margin: 0 0 0.15rem 0 !important;
-}
-
-/* ── MOBILE FIX ── */
-/* On mobile, show sidebar content ABOVE the map */
-@media (max-width: 768px) {
-    [data-testid="stSidebar"] {
-        min-width: 100vw !important;
-        max-width: 100vw !important;
-        border-right: none !important;
-        border-bottom: 2px solid var(--orange) !important;
-        position: relative !important;
-        height: auto !important;
-    }
-    [data-testid="stSidebar"] > div {
-        height: auto !important;
-        overflow: visible !important;
-    }
-    .block-container {
-        padding: 0.5rem !important;
-    }
-    [data-testid="stDeckGlJsonChart"] {
-        height: 400px !important;
-    }
+    font-size:0.82rem !important; color:var(--text) !important;
+    letter-spacing:2px !important; margin: 0 0 0.15rem 0 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -285,22 +239,19 @@ def haversine(lat1, lon1, lat2, lon2):
     a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
     return 2 * R * math.asin(math.sqrt(a))
 
-# ─────────────────────────────────────────
-# SIDEBAR
-# ─────────────────────────────────────────
-with st.sidebar:
+def render_inputs():
+    """Render all input widgets — used in both sidebar (desktop) and main (mobile)."""
     st.markdown("""
     <div class="sb-logo">NYC <span>TAXI</span> FARE</div>
-    <div class="sb-sub">🟠 Live ML Fare Estimator</div>
+    <div class="sb-sub">🟡 Live ML Fare Estimator</div>
     """, unsafe_allow_html=True)
 
-    # WHEN
     st.markdown('<div class="sl">When?</div>', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
-        pickup_date = st.date_input("Date", value=datetime.today())
+        pickup_date = st.date_input("Date", value=datetime.today(), key="date")
     with c2:
-        pickup_time = st.time_input("Time", value=datetime.now().time())
+        pickup_time = st.time_input("Time", value=datetime.now().time(), key="time")
 
     hour = pickup_time.hour
     if 7 <= hour <= 9 or 17 <= hour <= 19:
@@ -308,10 +259,9 @@ with st.sidebar:
     elif 22 <= hour or hour <= 5:
         tctx, tclr = "🌙 Late night surcharge", "#818cf8"
     else:
-        tctx, tclr = "✅ Standard fare period", "#4ade80"
+        tctx, tclr = "✅ Standard fare period", "#39ff14"
     st.markdown(f'<div class="time-ctx" style="color:{tclr};">{tctx}</div>', unsafe_allow_html=True)
 
-    # WHERE
     st.markdown('<div class="sl">Where to?</div>', unsafe_allow_html=True)
     ca, cb = st.columns(2)
     with ca:
@@ -334,16 +284,14 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
-    # PASSENGERS
     st.markdown('<div class="sl">Passengers</div>', unsafe_allow_html=True)
-    passenger_count = st.slider("", min_value=1, max_value=8, value=1)
+    passenger_count = st.slider("", min_value=1, max_value=8, value=1, key="pax")
     dots = '<div class="pax-dots">'
     for i in range(1, 9):
         dots += f'<div class="pax-dot {"on" if i <= passenger_count else ""}">👤</div>'
     dots += '</div>'
     st.markdown(dots, unsafe_allow_html=True)
 
-    # STATS
     rough_min = round(2.50 + distance_mi * 1.75, 2)
     rough_max = round(2.50 + distance_mi * 3.20 + passenger_count * 0.5, 2)
     st.markdown(f"""
@@ -356,8 +304,7 @@ with st.sidebar:
 
     st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
 
-    # BUTTON
-    if st.button("🚕  CALCULATE MY FARE"):
+    if st.button("🚕  CALCULATE MY FARE", key="calc"):
         params = {
             "pickup_datetime":   f"{pickup_date} {pickup_time}",
             "pickup_longitude":  pickup_lon,
@@ -372,7 +319,6 @@ with st.sidebar:
             except Exception as e:
                 st.error(f"Connection error: {e}")
                 st.stop()
-
         if r.status_code == 200:
             data = r.json()
             pred = data.get("fare", data.get("fare_amount"))
@@ -383,15 +329,12 @@ with st.sidebar:
         else:
             st.error(f"API Error {r.status_code}")
 
-    # FARE RESULT
     if "fare" in st.session_state:
         fare = st.session_state["fare"]
         if fare < 15:   vcls, vtxt = "v-cheap",  "🟢 GREAT DEAL"
-        elif fare < 35: vcls, vtxt = "v-mid",     "🟠 STANDARD FARE"
+        elif fare < 35: vcls, vtxt = "v-mid",     "🟡 STANDARD FARE"
         else:           vcls, vtxt = "v-pricey",  "🔴 PREMIUM RIDE"
-
         t15, t20, t25 = fare*.15, fare*.20, fare*.25
-
         st.markdown(f"""
 <div class="fare-box">
     <div class="fare-lbl">Estimated Fare</div>
@@ -410,33 +353,71 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# MAIN — MAP
-# ─────────────────────────────────────────
-st.markdown('<div class="main-title">Route Preview</div>', unsafe_allow_html=True)
+    return pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi
 
+# ─────────────────────────────────────────
+# DETECT MOBILE via user agent
+# ─────────────────────────────────────────
+# Inject JS to set a query param ?mobile=1 on small screens
+st.markdown("""
+<script>
+(function() {
+    if (window.innerWidth < 768) {
+        var url = new URL(window.location.href);
+        if (!url.searchParams.get('mobile')) {
+            url.searchParams.set('mobile', '1');
+            window.location.replace(url.toString());
+        }
+    }
+})();
+</script>
+""", unsafe_allow_html=True)
+
+query_params = st.query_params
+is_mobile = query_params.get("mobile", "") == "1"
+
+# ─────────────────────────────────────────
+# LAYOUT
+# ─────────────────────────────────────────
+if is_mobile:
+    # ── MOBILE: vertical stack ──
+    pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi = render_inputs()
+
+    st.markdown('<div class="main-title" style="margin-top:1rem;">Route Preview</div>', unsafe_allow_html=True)
+    map_height = 400
+else:
+    # ── DESKTOP: sidebar + map ──
+    with st.sidebar:
+        pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi = render_inputs()
+
+    st.markdown('<div class="main-title">Route Preview</div>', unsafe_allow_html=True)
+    map_height = 820
+
+# ─────────────────────────────────────────
+# MAP (shared)
+# ─────────────────────────────────────────
 arc_layer = pdk.Layer(
     "ArcLayer",
     data=[{"src": [pickup_lon, pickup_lat], "dst": [dropoff_lon, dropoff_lat]}],
     get_source_position="src",
     get_target_position="dst",
-    get_source_color=[245, 166, 35, 230],
-    get_target_color=[220, 38, 38, 230],
+    get_source_color=[247, 201, 72, 230],
+    get_target_color=[255, 57, 57, 230],
     width_min_pixels=5, width_max_pixels=9,
     great_circle=True,
 )
 scatter_layer = pdk.Layer(
     "ScatterplotLayer",
     data=[
-        {"pos": [pickup_lon, pickup_lat],   "col": [245, 166, 35, 240], "lbl": "📍 Pickup"},
-        {"pos": [dropoff_lon, dropoff_lat], "col": [220, 38, 38, 240],  "lbl": "🏁 Dropoff"},
+        {"pos": [pickup_lon, pickup_lat],   "col": [247, 201, 72, 240], "lbl": "📍 Pickup"},
+        {"pos": [dropoff_lon, dropoff_lat], "col": [255, 57, 57, 240],  "lbl": "🏁 Dropoff"},
     ],
     get_position="pos",
     get_fill_color="col",
     get_radius=80,
     radius_scale=6, radius_min_pixels=8, radius_max_pixels=20,
     pickable=True, stroked=True,
-    get_line_color=[255, 255, 255, 100],
+    get_line_color=[255, 255, 255, 80],
     line_width_min_pixels=2,
 )
 
@@ -454,4 +435,4 @@ deck = pdk.Deck(
     tooltip={"text": "{lbl}"},
 )
 
-st.pydeck_chart(deck, use_container_width=True, height=800)
+st.pydeck_chart(deck, use_container_width=True, height=map_height)

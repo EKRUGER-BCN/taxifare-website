@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 import math
 import json
+import pydeck as pdk
 
 st.set_page_config(
     page_title="NYC TaxiFare",
@@ -516,7 +517,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return 2 * R * math.asin(math.sqrt(a))
 
 distance_mi = haversine(pickup_lat, pickup_lon, dropoff_lat, dropoff_lon)
-est_mins = int(distance_mi * 3.5 + 5)  # rough estimate
+est_mins = int(distance_mi * 3.5 + 5)
 
 st.markdown(f"""
 <div class="coord-display">
@@ -541,15 +542,76 @@ dots_html += '</div>'
 st.markdown(dots_html, unsafe_allow_html=True)
 
 
-# ── MAP ──
+# ── MAP (pydeck arc) ──
 st.markdown('<div class="section-label">04 &nbsp; Route preview</div>', unsafe_allow_html=True)
-map_data = pd.DataFrame({
-    "lat": [pickup_lat, dropoff_lat],
-    "lon": [pickup_lon, dropoff_lon],
-    "size": [80, 80],
-    "color": [[247, 201, 72, 200], [255, 80, 80, 200]]
-})
-st.map(map_data, use_container_width=True)
+
+arc_data = [{
+    "sourcePosition": [pickup_lon, pickup_lat],
+    "targetPosition": [dropoff_lon, dropoff_lat],
+}]
+
+scatter_data = [
+    {"position": [pickup_lon, pickup_lat],   "color": [247, 201, 72, 220],  "radius": 80, "label": "📍 Pickup"},
+    {"position": [dropoff_lon, dropoff_lat], "color": [255, 80, 80, 220],   "radius": 80, "label": "🏁 Dropoff"},
+]
+
+arc_layer = pdk.Layer(
+    "ArcLayer",
+    data=arc_data,
+    get_source_position="sourcePosition",
+    get_target_position="targetPosition",
+    get_source_color=[247, 201, 72, 220],
+    get_target_color=[255, 80, 80, 220],
+    auto_highlight=True,
+    width_min_pixels=4,
+    width_max_pixels=8,
+    great_circle=True,
+)
+
+scatter_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=scatter_data,
+    get_position="position",
+    get_fill_color="color",
+    get_radius="radius",
+    radius_scale=6,
+    radius_min_pixels=8,
+    radius_max_pixels=20,
+    pickable=True,
+    stroked=True,
+    get_line_color=[255, 255, 255, 80],
+    line_width_min_pixels=2,
+)
+
+mid_lat = (pickup_lat + dropoff_lat) / 2
+mid_lon = (pickup_lon + dropoff_lon) / 2
+
+# Auto zoom based on distance
+if distance_mi < 1:
+    zoom = 14
+elif distance_mi < 3:
+    zoom = 13
+elif distance_mi < 8:
+    zoom = 12
+else:
+    zoom = 11
+
+view_state = pdk.ViewState(
+    latitude=mid_lat,
+    longitude=mid_lon,
+    zoom=zoom,
+    pitch=45,
+    bearing=0,
+)
+
+deck = pdk.Deck(
+    layers=[arc_layer, scatter_layer],
+    initial_view_state=view_state,
+    map_style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    tooltip={"text": "{label}"},
+)
+
+st.pydeck_chart(deck, use_container_width=True)
 
 
 # ── STATS PREVIEW ──
@@ -601,7 +663,6 @@ if st.button("🚕  CALCULATE MY FARE"):
         if prediction is not None:
             fare = float(prediction)
 
-            # Verdict
             if fare < 15:
                 verdict_cls = "verdict-cheap"
                 verdict_txt = "🟢 GREAT DEAL"
@@ -625,7 +686,6 @@ if st.button("🚕  CALCULATE MY FARE"):
 </div>
 """, unsafe_allow_html=True)
 
-            # Tip calculator
             st.markdown('<div class="section-label">Tip calculator</div>', unsafe_allow_html=True)
             st.markdown(f"""
 <div class="stats-row">
@@ -644,7 +704,6 @@ if st.button("🚕  CALCULATE MY FARE"):
 </div>
 """, unsafe_allow_html=True)
 
-            # Grand total row
             st.markdown(f"""
 <div style="background:var(--surface2); border:1px solid var(--border); border-radius:4px;
      padding:1rem; margin-top:0.75rem; display:flex; justify-content:space-between;
@@ -672,6 +731,3 @@ st.markdown("""
     Not affiliated with NYC TLC · For estimation purposes only
 </div>
 """, unsafe_allow_html=True)
-
-# ── END ──
-st.markdown("""<div class="end">Thanks for using NYC TaxiFare Estimator!</div>""", unsafe_allow_html=True)

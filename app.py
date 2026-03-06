@@ -1,13 +1,13 @@
 import streamlit as st
 import requests
-from datetime import datetime
+from datetime import datetime, time
 import math
 import pydeck as pdk
 
 st.set_page_config(
     page_title="NYC TaxiFare",
     page_icon="🚕",
-    layout="centered"
+    layout="wide"
 )
 
 st.markdown("""
@@ -49,9 +49,9 @@ st.markdown("""
 .topbar {
     background: var(--surface);
     border-bottom: 2px solid var(--yellow);
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.5rem;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.25rem;
@@ -66,48 +66,10 @@ st.markdown("""
 .logo span { color: #fff; }
 .logo-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 0.48rem;
+    font-size: 0.45rem;
     color: var(--muted);
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 0.2rem;
-}
-
-/* ── MAIN GRID: desktop = 2 cols, mobile = 1 col ── */
-.main-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    grid-template-rows: 1fr;
-    height: calc(100vh - 72px);
-}
-@media (max-width: 768px) {
-    .main-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        height: auto;
-    }
-    .logo { font-size: 2rem; }
-}
-
-/* ── LEFT PANEL ── */
-.left-panel {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    padding: 1rem;
-}
-@media (max-width: 768px) {
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        overflow-y: visible;
-    }
-}
-
-/* ── RIGHT PANEL ── */
-.right-panel {
-    background: var(--black);
-    position: relative;
 }
 
 /* ── SECTION LABELS ── */
@@ -122,7 +84,7 @@ st.markdown("""
     color: var(--yellow);
     margin: 0.85rem 0 0.4rem 0;
 }
-.sl:first-child { margin-top: 0; }
+.sl:first-child { margin-top: 0.2rem; }
 .sl::before { content:''; display:block; width:10px; height:2px; background:var(--yellow); flex-shrink:0; }
 .sl::after  { content:''; display:block; flex:1; height:1px; background:var(--border); }
 
@@ -135,8 +97,7 @@ label, [data-testid="stWidgetLabel"] {
     letter-spacing: 1.5px !important;
 }
 input[type="number"], input[type="text"],
-[data-testid="stDateInput"] input,
-[data-testid="stTimeInput"] input {
+[data-testid="stDateInput"] input {
     background: var(--surface2) !important;
     border: 1px solid var(--border-bright) !important;
     border-radius: 4px !important;
@@ -148,6 +109,16 @@ input:focus {
     border-color: var(--yellow) !important;
     box-shadow: 0 0 0 2px var(--yellow-glow) !important;
     outline: none !important;
+}
+
+/* selectbox */
+[data-testid="stSelectbox"] > div > div {
+    background: var(--surface2) !important;
+    border: 1px solid var(--border-bright) !important;
+    border-radius: 4px !important;
+    color: var(--yellow) !important;
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.72rem !important;
 }
 
 /* ── SLIDER ── */
@@ -176,7 +147,7 @@ input:focus {
     box-shadow: 0 6px 20px rgba(247,201,72,0.3) !important;
 }
 
-/* ── COORD BOX ── */
+/* ── BOXES ── */
 .coord-box {
     font-family: 'Space Mono', monospace;
     font-size: 0.54rem;
@@ -246,6 +217,13 @@ h3 {
     letter-spacing:2px !important; margin: 0 0 0.15rem 0 !important;
 }
 
+/* left col dark bg */
+[data-testid="column"]:first-child {
+    background: var(--surface) !important;
+    padding: 0.75rem 1rem 1.5rem 1rem !important;
+    border-right: 1px solid var(--border) !important;
+}
+
 [data-testid="stDeckGlJsonChart"] {
     border-radius: 0 !important;
     border: none !important;
@@ -265,31 +243,27 @@ def haversine(lat1, lon1, lat2, lon2):
 # ── TOPBAR ──
 st.markdown("""
 <div class="topbar">
-    <div>
-        <div class="logo">NYC <span>TAXI</span> FARE</div>
-    </div>
+    <div class="logo">NYC <span>TAXI</span> FARE</div>
     <div class="logo-sub">🟡 Live ML Fare Estimator · New York City</div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── TWO COLUMN LAYOUT via st.columns (works on all screen sizes) ──
-# On mobile Streamlit stacks columns vertically automatically
+# ── LAYOUT ──
 left, right = st.columns([1, 1.8], gap="small")
 
 with left:
-    st.markdown("""
-    <div style="background:var(--surface); padding:1rem; min-height:100%;">
-    """, unsafe_allow_html=True)
-
     # WHEN
     st.markdown('<div class="sl">When?</div>', unsafe_allow_html=True)
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns([2, 1, 1])
     with c1:
         pickup_date = st.date_input("Date", value=datetime.today())
     with c2:
-        pickup_time = st.time_input("Time", value=datetime.now().time())
+        hour = st.selectbox("Hour", list(range(24)), index=datetime.now().hour, format_func=lambda x: f"{x:02d}")
+    with c3:
+        minute = st.selectbox("Min", [0, 15, 30, 45], index=0, format_func=lambda x: f"{x:02d}")
 
-    hour = pickup_time.hour
+    pickup_time = time(hour, minute)
+
     if 7 <= hour <= 9 or 17 <= hour <= 19:
         tctx, tclr = "⚠️ Rush hour", "#f59e0b"
     elif 22 <= hour or hour <= 5:
@@ -394,8 +368,6 @@ with left:
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
 # ── MAP ──
 with right:
     arc_layer = pdk.Layer(
@@ -438,5 +410,3 @@ with right:
     )
 
     st.pydeck_chart(deck, use_container_width=True, height=780)
-
-    st.markdown("<div style='height:0.2rem'></div>", unsafe_allow_html=True)

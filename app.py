@@ -7,7 +7,7 @@ import pydeck as pdk
 st.set_page_config(
     page_title="NYC TaxiFare",
     page_icon="🚕",
-    layout="wide"
+    layout="centered"
 )
 
 st.markdown("""
@@ -37,43 +37,77 @@ st.markdown("""
     font-family: 'DM Sans', sans-serif;
 }
 [data-testid="stHeader"] { display: none !important; }
+[data-testid="stSidebar"] { display: none !important; }
 #MainMenu, footer, [data-testid="stToolbar"] { visibility: hidden; }
+
 .block-container {
-    padding: 0.5rem 1rem 1rem 1rem !important;
+    padding: 0 !important;
     max-width: 100% !important;
 }
 
-/* ── SIDEBAR ── */
-[data-testid="stSidebar"] {
-    background: var(--surface) !important;
-    border-right: 2px solid var(--yellow) !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
+/* ── TOPBAR ── */
+.topbar {
+    background: var(--surface);
+    border-bottom: 2px solid var(--yellow);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.25rem;
 }
-[data-testid="stSidebar"] > div {
-    padding: 0.75rem 1rem 2rem 1rem !important;
-}
-[data-testid="stSidebarNav"] { display: none; }
-
-/* ── LOGO ── */
-.sb-logo {
+.logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2.8rem;
     color: var(--yellow);
     letter-spacing: 5px;
     line-height: 1;
-    margin-bottom: 0.2rem;
 }
-.sb-logo span { color: #fff; }
-.sb-sub {
+.logo span { color: #fff; }
+.logo-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 0.45rem;
+    font-size: 0.48rem;
     color: var(--muted);
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.2rem;
+}
+
+/* ── MAIN GRID: desktop = 2 cols, mobile = 1 col ── */
+.main-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    grid-template-rows: 1fr;
+    height: calc(100vh - 72px);
+}
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        height: auto;
+    }
+    .logo { font-size: 2rem; }
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1rem;
+}
+@media (max-width: 768px) {
+    .left-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        overflow-y: visible;
+    }
+}
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+    background: var(--black);
+    position: relative;
 }
 
 /* ── SECTION LABELS ── */
@@ -88,12 +122,11 @@ st.markdown("""
     color: var(--yellow);
     margin: 0.85rem 0 0.4rem 0;
 }
+.sl:first-child { margin-top: 0; }
 .sl::before { content:''; display:block; width:10px; height:2px; background:var(--yellow); flex-shrink:0; }
 .sl::after  { content:''; display:block; flex:1; height:1px; background:var(--border); }
 
 /* ── INPUTS ── */
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
 label, [data-testid="stWidgetLabel"] {
     color: var(--muted) !important;
     font-family: 'Space Mono', monospace !important;
@@ -207,30 +240,20 @@ input:focus {
 .tip-lbl { font-family:'Space Mono',monospace; font-size:0.45rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
 .tip-val { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--yellow); }
 
-/* ── MAIN ── */
-.main-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-}
-[data-testid="stDeckGlJsonChart"] {
-    border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
-}
 h3 {
     font-family:'Bebas Neue',sans-serif !important;
     font-size:0.82rem !important; color:var(--text) !important;
     letter-spacing:2px !important; margin: 0 0 0.15rem 0 !important;
 }
+
+[data-testid="stDeckGlJsonChart"] {
+    border-radius: 0 !important;
+    border: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# HELPER
-# ─────────────────────────────────────────
+# ── HELPER ──
 def haversine(lat1, lon1, lat2, lon2):
     R = 3958.8
     phi1, phi2 = math.radians(lat1), math.radians(lat2)
@@ -239,19 +262,32 @@ def haversine(lat1, lon1, lat2, lon2):
     a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
     return 2 * R * math.asin(math.sqrt(a))
 
-def render_inputs():
-    """Render all input widgets — used in both sidebar (desktop) and main (mobile)."""
+# ── TOPBAR ──
+st.markdown("""
+<div class="topbar">
+    <div>
+        <div class="logo">NYC <span>TAXI</span> FARE</div>
+    </div>
+    <div class="logo-sub">🟡 Live ML Fare Estimator · New York City</div>
+</div>
+""", unsafe_allow_html=True)
+
+# ── TWO COLUMN LAYOUT via st.columns (works on all screen sizes) ──
+# On mobile Streamlit stacks columns vertically automatically
+left, right = st.columns([1, 1.8], gap="small")
+
+with left:
     st.markdown("""
-    <div class="sb-logo">NYC <span>TAXI</span> FARE</div>
-    <div class="sb-sub">🟡 Live ML Fare Estimator</div>
+    <div style="background:var(--surface); padding:1rem; min-height:100%;">
     """, unsafe_allow_html=True)
 
+    # WHEN
     st.markdown('<div class="sl">When?</div>', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
-        pickup_date = st.date_input("Date", value=datetime.today(), key="date")
+        pickup_date = st.date_input("Date", value=datetime.today())
     with c2:
-        pickup_time = st.time_input("Time", value=datetime.now().time(), key="time")
+        pickup_time = st.time_input("Time", value=datetime.now().time())
 
     hour = pickup_time.hour
     if 7 <= hour <= 9 or 17 <= hour <= 19:
@@ -262,6 +298,7 @@ def render_inputs():
         tctx, tclr = "✅ Standard fare period", "#39ff14"
     st.markdown(f'<div class="time-ctx" style="color:{tclr};">{tctx}</div>', unsafe_allow_html=True)
 
+    # WHERE
     st.markdown('<div class="sl">Where to?</div>', unsafe_allow_html=True)
     ca, cb = st.columns(2)
     with ca:
@@ -284,14 +321,16 @@ def render_inputs():
 </div>
 """, unsafe_allow_html=True)
 
+    # PASSENGERS
     st.markdown('<div class="sl">Passengers</div>', unsafe_allow_html=True)
-    passenger_count = st.slider("", min_value=1, max_value=8, value=1, key="pax")
+    passenger_count = st.slider("", min_value=1, max_value=8, value=1)
     dots = '<div class="pax-dots">'
     for i in range(1, 9):
         dots += f'<div class="pax-dot {"on" if i <= passenger_count else ""}">👤</div>'
     dots += '</div>'
     st.markdown(dots, unsafe_allow_html=True)
 
+    # STATS
     rough_min = round(2.50 + distance_mi * 1.75, 2)
     rough_max = round(2.50 + distance_mi * 3.20 + passenger_count * 0.5, 2)
     st.markdown(f"""
@@ -304,7 +343,8 @@ def render_inputs():
 
     st.markdown("<div style='height:0.4rem'></div>", unsafe_allow_html=True)
 
-    if st.button("🚕  CALCULATE MY FARE", key="calc"):
+    # BUTTON
+    if st.button("🚕  CALCULATE MY FARE"):
         params = {
             "pickup_datetime":   f"{pickup_date} {pickup_time}",
             "pickup_longitude":  pickup_lon,
@@ -329,6 +369,7 @@ def render_inputs():
         else:
             st.error(f"API Error {r.status_code}")
 
+    # FARE RESULT
     if "fare" in st.session_state:
         fare = st.session_state["fare"]
         if fare < 15:   vcls, vtxt = "v-cheap",  "🟢 GREAT DEAL"
@@ -353,86 +394,49 @@ def render_inputs():
 </div>
 """, unsafe_allow_html=True)
 
-    return pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi
+    st.markdown("</div>", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# DETECT MOBILE via user agent
-# ─────────────────────────────────────────
-# Inject JS to set a query param ?mobile=1 on small screens
-st.markdown("""
-<script>
-(function() {
-    if (window.innerWidth < 768) {
-        var url = new URL(window.location.href);
-        if (!url.searchParams.get('mobile')) {
-            url.searchParams.set('mobile', '1');
-            window.location.replace(url.toString());
-        }
-    }
-})();
-</script>
-""", unsafe_allow_html=True)
+# ── MAP ──
+with right:
+    arc_layer = pdk.Layer(
+        "ArcLayer",
+        data=[{"src": [pickup_lon, pickup_lat], "dst": [dropoff_lon, dropoff_lat]}],
+        get_source_position="src",
+        get_target_position="dst",
+        get_source_color=[247, 201, 72, 230],
+        get_target_color=[255, 57, 57, 230],
+        width_min_pixels=5, width_max_pixels=9,
+        great_circle=True,
+    )
+    scatter_layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=[
+            {"pos": [pickup_lon, pickup_lat],   "col": [247, 201, 72, 240], "lbl": "📍 Pickup"},
+            {"pos": [dropoff_lon, dropoff_lat], "col": [255, 57, 57, 240],  "lbl": "🏁 Dropoff"},
+        ],
+        get_position="pos",
+        get_fill_color="col",
+        get_radius=80,
+        radius_scale=6, radius_min_pixels=8, radius_max_pixels=20,
+        pickable=True, stroked=True,
+        get_line_color=[255, 255, 255, 80],
+        line_width_min_pixels=2,
+    )
 
-query_params = st.query_params
-is_mobile = query_params.get("mobile", "") == "1"
+    mid_lat = (pickup_lat + dropoff_lat) / 2
+    mid_lon = (pickup_lon + dropoff_lon) / 2
+    zoom = 14 if distance_mi < 1 else 13 if distance_mi < 3 else 12 if distance_mi < 8 else 11
 
-# ─────────────────────────────────────────
-# LAYOUT
-# ─────────────────────────────────────────
-if is_mobile:
-    # ── MOBILE: vertical stack ──
-    pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi = render_inputs()
+    deck = pdk.Deck(
+        layers=[arc_layer, scatter_layer],
+        initial_view_state=pdk.ViewState(
+            latitude=mid_lat, longitude=mid_lon,
+            zoom=zoom, pitch=45, bearing=0,
+        ),
+        map_style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
+        tooltip={"text": "{lbl}"},
+    )
 
-    st.markdown('<div class="main-title" style="margin-top:1rem;">Route Preview</div>', unsafe_allow_html=True)
-    map_height = 400
-else:
-    # ── DESKTOP: sidebar + map ──
-    with st.sidebar:
-        pickup_lat, pickup_lon, dropoff_lat, dropoff_lon, distance_mi = render_inputs()
+    st.pydeck_chart(deck, use_container_width=True, height=780)
 
-    st.markdown('<div class="main-title">Route Preview</div>', unsafe_allow_html=True)
-    map_height = 820
-
-# ─────────────────────────────────────────
-# MAP (shared)
-# ─────────────────────────────────────────
-arc_layer = pdk.Layer(
-    "ArcLayer",
-    data=[{"src": [pickup_lon, pickup_lat], "dst": [dropoff_lon, dropoff_lat]}],
-    get_source_position="src",
-    get_target_position="dst",
-    get_source_color=[247, 201, 72, 230],
-    get_target_color=[255, 57, 57, 230],
-    width_min_pixels=5, width_max_pixels=9,
-    great_circle=True,
-)
-scatter_layer = pdk.Layer(
-    "ScatterplotLayer",
-    data=[
-        {"pos": [pickup_lon, pickup_lat],   "col": [247, 201, 72, 240], "lbl": "📍 Pickup"},
-        {"pos": [dropoff_lon, dropoff_lat], "col": [255, 57, 57, 240],  "lbl": "🏁 Dropoff"},
-    ],
-    get_position="pos",
-    get_fill_color="col",
-    get_radius=80,
-    radius_scale=6, radius_min_pixels=8, radius_max_pixels=20,
-    pickable=True, stroked=True,
-    get_line_color=[255, 255, 255, 80],
-    line_width_min_pixels=2,
-)
-
-mid_lat = (pickup_lat + dropoff_lat) / 2
-mid_lon = (pickup_lon + dropoff_lon) / 2
-zoom = 14 if distance_mi < 1 else 13 if distance_mi < 3 else 12 if distance_mi < 8 else 11
-
-deck = pdk.Deck(
-    layers=[arc_layer, scatter_layer],
-    initial_view_state=pdk.ViewState(
-        latitude=mid_lat, longitude=mid_lon,
-        zoom=zoom, pitch=45, bearing=0,
-    ),
-    map_style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
-    tooltip={"text": "{lbl}"},
-)
-
-st.pydeck_chart(deck, use_container_width=True, height=map_height)
+    st.markdown("<div style='height:0.2rem'></div>", unsafe_allow_html=True)
